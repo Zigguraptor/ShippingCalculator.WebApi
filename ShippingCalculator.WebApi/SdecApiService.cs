@@ -31,8 +31,14 @@ public class SdecApiService : ISdecApiService
 
         await using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-        return JsonSerializer.Deserialize<IEnumerable<Location>>(responseStream)?.FirstOrDefault() ??
-               throw new JsonException();
+        var location = JsonSerializer.Deserialize<IEnumerable<Location>>(responseStream)?.FirstOrDefault();
+
+        if (location == null)
+            throw new JsonException();
+        if (location.fias_guid != fiasCode)
+            throw new Exception($"Location not found for fiasCode: {fiasCode}");
+
+        return location;
     }
 
     public async Task<string> CalculateShippingCostAsync(
