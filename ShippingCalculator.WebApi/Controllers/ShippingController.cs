@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using ShippingCalculator.WebApi.Models;
 
@@ -37,7 +38,8 @@ public class ShippingController : ControllerBase
             };
             var costList =
                 await _sdecApiService.CalculateShippingCostAsync(new[] { package }, senderLocation, receiverLocation);
-            return new JsonResult(costList);
+
+            return Content(costList, "application/json", Encoding.UTF8);
         }
         catch (Exception e)
         {
