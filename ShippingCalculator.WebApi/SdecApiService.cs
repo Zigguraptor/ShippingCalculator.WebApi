@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using Microsoft.Net.Http.Headers;
 using ShippingCalculator.WebApi.Configurations;
 using ShippingCalculator.WebApi.Models;
@@ -32,5 +33,24 @@ public class SdecApiService
 
         return JsonSerializer.Deserialize<IEnumerable<Location>>(responseStream)?.FirstOrDefault() ??
                throw new JsonException();
+    }
+
+    public async Task<string> CalculateShippingCostAsync(
+        IEnumerable<Package> packages, Location sender, Location receiver)
+    {
+        var request = new RequestToTariffList
+        {
+            type = (int)OrderType.Delivery,
+            currency = (int)Currency.RUB,
+            from_location = sender,
+            to_location = receiver,
+            packages = packages
+        };
+        var jsonContent = JsonSerializer.Serialize(request);
+        var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+        var httpResponseMessage = await _httpClient
+            .PostAsync(_sdecApiConfiguration.CalculatorTarifflistUrl, stringContent).ConfigureAwait(false);
+
+        return await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
     }
 }
