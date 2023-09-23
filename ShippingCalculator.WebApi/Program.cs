@@ -9,8 +9,9 @@ namespace ShippingCalculator.WebApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            
             builder.Services.AddConfigurations();
+
+            builder.Services.AddHttpClient<ISdecApiService, SdecApiService>();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
