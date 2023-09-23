@@ -6,7 +6,7 @@ using ShippingCalculator.WebApi.Models;
 
 namespace ShippingCalculator.WebApi;
 
-public class SdecApiService
+public class SdecApiService : ISdecApiService
 {
     private readonly HttpClient _httpClient;
     private readonly SdecApiConfiguration _sdecApiConfiguration;
