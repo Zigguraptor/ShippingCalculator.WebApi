@@ -1,3 +1,5 @@
+using ShippingCalculator.WebApi.Configurations;
+
 namespace ShippingCalculator.WebApi
 {
     public class Program
@@ -7,6 +9,8 @@ namespace ShippingCalculator.WebApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            
+            builder.Services.AddConfigurations();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
