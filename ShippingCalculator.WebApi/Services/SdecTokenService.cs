@@ -24,6 +24,8 @@ public class SdecTokenService : ISdecTokenService
     {
         if (_expiringTime > DateTime.Now) return _token;
 
+        // Если токен истёк, то что бы избежать множественной генерации, мы делаем дабл чек лок.
+        // Первый кто залочит сгенерирует токен, остальные выйдут по условию if.
         lock (_lock)
             if (_expiringTime < DateTime.Now)
                 _token = GetNewToken();
@@ -46,6 +48,7 @@ public class SdecTokenService : ISdecTokenService
 
         if (accessToken?.AccessToken is null) throw new JsonException(responseMessage);
 
+        // Рассчитываем  когда истечёт токен. Делаем запас 10% времени жизни.
         _expiringTime = DateTime.Now + TimeSpan.FromMilliseconds((int)(accessToken.ExpiresIn * 0.9d));
 
         return accessToken.AccessToken;
