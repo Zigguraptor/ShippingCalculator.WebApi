@@ -30,6 +30,7 @@ public class ShippingController : ControllerBase
             var receiverLocation = senderCityFias != receiverCityFias
                 ? await _sdecApiService.GetLocationByFiasCodeAsync(receiverCityFias)
                 : senderLocation;
+            // Перевод миллиметров в сантиметры.
             var package = new Package
             {
                 Weight = weightGrams,
