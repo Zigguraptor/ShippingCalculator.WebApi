@@ -34,9 +34,9 @@ public class ShippingController : ControllerBase
             var package = new Package
             {
                 Weight = weightGrams,
-                Height = (int)Math.Ceiling(heightMm / 10d),
-                Length = (int)Math.Ceiling(lengthMm / 10d),
-                Width = (int)Math.Ceiling(widthMm / 10d)
+                HeightCm = (int)Math.Ceiling(heightMm / 10d),
+                LengthCm = (int)Math.Ceiling(lengthMm / 10d),
+                WidthCm = (int)Math.Ceiling(widthMm / 10d)
             };
             var costList =
                 await _sdecApiService.CalculateShippingCostAsync(new[] { package }, senderLocation, receiverLocation);
