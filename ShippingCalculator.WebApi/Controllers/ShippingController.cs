@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using ShippingCalculator.WebApi.Models;
+using ShippingCalculator.WebApi.Services;
 
 namespace ShippingCalculator.WebApi.Controllers;
 
@@ -9,12 +10,12 @@ namespace ShippingCalculator.WebApi.Controllers;
 public class ShippingController : ControllerBase
 {
     private readonly ILogger<ShippingController> _logger;
-    private readonly ISdecApiService _sdecApiService;
+    private readonly ICdecApiService _cdecApiService;
 
-    public ShippingController(ILogger<ShippingController> logger, ISdecApiService sdecApiService)
+    public ShippingController(ILogger<ShippingController> logger, ICdecApiService cdecApiService)
     {
         _logger = logger;
-        _sdecApiService = sdecApiService;
+        _cdecApiService = cdecApiService;
     }
 
     [HttpGet]
@@ -24,20 +25,21 @@ public class ShippingController : ControllerBase
     {
         try
         {
-            var senderLocation = await _sdecApiService.GetLocationByFiasCodeAsync(senderCityFias);
+            var senderLocation = await _cdecApiService.GetLocationByFiasCodeAsync(senderCityFias);
             // Делаем второй запрос только если коды разные.
             var receiverLocation = senderCityFias != receiverCityFias
-                ? await _sdecApiService.GetLocationByFiasCodeAsync(receiverCityFias)
+                ? await _cdecApiService.GetLocationByFiasCodeAsync(receiverCityFias)
                 : senderLocation;
+            // Перевод миллиметров в сантиметры.
             var package = new Package
             {
-                weight = weightGrams,
-                height = (int)Math.Ceiling(heightMm / 10d),
-                length = (int)Math.Ceiling(lengthMm / 10d),
-                width = (int)Math.Ceiling(widthMm / 10d)
+                Weight = weightGrams,
+                HeightCm = (int)Math.Ceiling(heightMm / 10d),
+                LengthCm = (int)Math.Ceiling(lengthMm / 10d),
+                WidthCm = (int)Math.Ceiling(widthMm / 10d)
             };
             var costList =
-                await _sdecApiService.CalculateShippingCostAsync(new[] { package }, senderLocation, receiverLocation);
+                await _cdecApiService.CalculateShippingCostAsync(new[] { package }, senderLocation, receiverLocation);
 
             return Content(costList, "application/json", Encoding.UTF8);
         }

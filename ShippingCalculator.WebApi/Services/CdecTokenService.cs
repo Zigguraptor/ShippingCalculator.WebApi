@@ -4,19 +4,19 @@ using ShippingCalculator.WebApi.Models;
 
 namespace ShippingCalculator.WebApi.Services;
 
-public class SdecTokenService : ISdecTokenService
+public class CdecTokenService : ICdecTokenService
 {
     private readonly object _lock = new();
     private readonly HttpClient _httpClient;
-    private readonly SdecApiConfiguration _sdecApiConfiguration;
+    private readonly CdecApiConfiguration _cdecApiConfiguration;
     private string _token;
     private DateTime _expiringTime;
 
-    public SdecTokenService(HttpClient httpClient, SdecApiConfiguration sdecApiConfiguration)
+    public CdecTokenService(HttpClient httpClient, CdecApiConfiguration cdecApiConfiguration)
     {
         _httpClient = httpClient;
-        _sdecApiConfiguration = sdecApiConfiguration;
-        _httpClient.BaseAddress = _sdecApiConfiguration.BaseUri;
+        _cdecApiConfiguration = cdecApiConfiguration;
+        _httpClient.BaseAddress = _cdecApiConfiguration.BaseUri;
         _token = GetNewToken();
     }
 
@@ -36,9 +36,9 @@ public class SdecTokenService : ISdecTokenService
     private string GetNewToken()
     {
         var parameters =
-            $"?grant_type=client_credentials&client_id={_sdecApiConfiguration.ClientId}&client_secret={_sdecApiConfiguration.ClientSecret}";
+            $"?grant_type=client_credentials&client_id={_cdecApiConfiguration.ClientId}&client_secret={_cdecApiConfiguration.ClientSecret}";
         using var httpResponseMessage = _httpClient
-            .PostAsync(_sdecApiConfiguration.AuthorizationUri + parameters, new StringContent("")).Result;
+            .PostAsync(_cdecApiConfiguration.AuthorizationUri + parameters, new StringContent("")).Result;
 
         if (!httpResponseMessage.IsSuccessStatusCode)
             throw new Exception($"SDEC authorization error: {httpResponseMessage.ReasonPhrase}");
