@@ -8,7 +8,7 @@ public static class ConfigurationServiceCollectionExtensions
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .Build();
-        var sdecApiConfiguration = new SdecApiConfiguration();
+        var sdecApiConfiguration = new CdecApiConfiguration();
 
         configuration.GetSection("CdekApi").Bind(sdecApiConfiguration);
 

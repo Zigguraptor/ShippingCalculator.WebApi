@@ -10,12 +10,12 @@ namespace ShippingCalculator.WebApi.Controllers;
 public class ShippingController : ControllerBase
 {
     private readonly ILogger<ShippingController> _logger;
-    private readonly ISdecApiService _sdecApiService;
+    private readonly ICdecApiService _cdecApiService;
 
-    public ShippingController(ILogger<ShippingController> logger, ISdecApiService sdecApiService)
+    public ShippingController(ILogger<ShippingController> logger, ICdecApiService cdecApiService)
     {
         _logger = logger;
-        _sdecApiService = sdecApiService;
+        _cdecApiService = cdecApiService;
     }
 
     [HttpGet]
@@ -25,10 +25,10 @@ public class ShippingController : ControllerBase
     {
         try
         {
-            var senderLocation = await _sdecApiService.GetLocationByFiasCodeAsync(senderCityFias);
+            var senderLocation = await _cdecApiService.GetLocationByFiasCodeAsync(senderCityFias);
             // Делаем второй запрос только если коды разные.
             var receiverLocation = senderCityFias != receiverCityFias
-                ? await _sdecApiService.GetLocationByFiasCodeAsync(receiverCityFias)
+                ? await _cdecApiService.GetLocationByFiasCodeAsync(receiverCityFias)
                 : senderLocation;
             // Перевод миллиметров в сантиметры.
             var package = new Package
@@ -39,7 +39,7 @@ public class ShippingController : ControllerBase
                 WidthCm = (int)Math.Ceiling(widthMm / 10d)
             };
             var costList =
-                await _sdecApiService.CalculateShippingCostAsync(new[] { package }, senderLocation, receiverLocation);
+                await _cdecApiService.CalculateShippingCostAsync(new[] { package }, senderLocation, receiverLocation);
 
             return Content(costList, "application/json", Encoding.UTF8);
         }

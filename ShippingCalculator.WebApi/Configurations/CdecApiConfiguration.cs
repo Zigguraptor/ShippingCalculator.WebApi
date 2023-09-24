@@ -1,6 +1,6 @@
 ﻿namespace ShippingCalculator.WebApi.Configurations;
 
-public class SdecApiConfiguration
+public class CdecApiConfiguration
 {
     public Uri BaseUri { get; set; } = null!;
     public string AuthorizationUri { get; set; } = null!;

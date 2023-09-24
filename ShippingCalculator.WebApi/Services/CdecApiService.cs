@@ -6,26 +6,26 @@ using ShippingCalculator.WebApi.Models;
 
 namespace ShippingCalculator.WebApi.Services;
 
-public class SdecApiService : ISdecApiService
+public class CdecApiService : ICdecApiService
 {
     private readonly HttpClient _httpClient;
-    private readonly SdecApiConfiguration _sdecApiConfiguration;
+    private readonly CdecApiConfiguration _cdecApiConfiguration;
 
-    public SdecApiService(HttpClient httpClient, ISdecTokenService sdecTokenService,
-        SdecApiConfiguration sdecApiConfiguration)
+    public CdecApiService(HttpClient httpClient, ICdecTokenService cdecTokenService,
+        CdecApiConfiguration cdecApiConfiguration)
     {
         _httpClient = httpClient;
-        _sdecApiConfiguration = sdecApiConfiguration;
-        _httpClient.BaseAddress = _sdecApiConfiguration.BaseUri;
+        _cdecApiConfiguration = cdecApiConfiguration;
+        _httpClient.BaseAddress = _cdecApiConfiguration.BaseUri;
         _httpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", sdecTokenService.GetToken());
+            new AuthenticationHeaderValue("Bearer", cdecTokenService.GetToken());
     }
 
     public async Task<Location> GetLocationByFiasCodeAsync(string fiasCode)
     {
-        var parameters = $"?{_sdecApiConfiguration.FiasGuidParameter}={fiasCode}";
+        var parameters = $"?{_cdecApiConfiguration.FiasGuidParameter}={fiasCode}";
         using var response = await _httpClient
-            .GetAsync(_sdecApiConfiguration.LocationCitiesUrl + parameters).ConfigureAwait(false);
+            .GetAsync(_cdecApiConfiguration.LocationCitiesUrl + parameters).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
             throw new Exception($"SDEC API request error: {response.ReasonPhrase}");
@@ -56,7 +56,7 @@ public class SdecApiService : ISdecApiService
         var jsonContent = JsonSerializer.Serialize(request);
         var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
         var httpResponseMessage = await _httpClient
-            .PostAsync(_sdecApiConfiguration.CalculatorTarifflistUrl, stringContent).ConfigureAwait(false);
+            .PostAsync(_cdecApiConfiguration.CalculatorTarifflistUrl, stringContent).ConfigureAwait(false);
 
         return await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
     }

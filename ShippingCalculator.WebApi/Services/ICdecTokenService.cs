@@ -1,6 +1,6 @@
 ﻿namespace ShippingCalculator.WebApi.Services;
 
-public interface ISdecTokenService
+public interface ICdecTokenService
 {
     public string GetToken();
 }
