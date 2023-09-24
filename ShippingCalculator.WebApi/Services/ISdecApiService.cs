@@ -1,6 +1,6 @@
 ﻿using ShippingCalculator.WebApi.Models;
 
-namespace ShippingCalculator.WebApi;
+namespace ShippingCalculator.WebApi.Services;
 
 public interface ISdecApiService
 {

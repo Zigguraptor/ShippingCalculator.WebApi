@@ -3,9 +3,8 @@ using System.Text;
 using System.Text.Json;
 using ShippingCalculator.WebApi.Configurations;
 using ShippingCalculator.WebApi.Models;
-using ShippingCalculator.WebApi.Services;
 
-namespace ShippingCalculator.WebApi;
+namespace ShippingCalculator.WebApi.Services;
 
 public class SdecApiService : ISdecApiService
 {

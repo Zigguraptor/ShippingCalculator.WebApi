@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using ShippingCalculator.WebApi.Models;
+using ShippingCalculator.WebApi.Services;
 
 namespace ShippingCalculator.WebApi.Controllers;
 
