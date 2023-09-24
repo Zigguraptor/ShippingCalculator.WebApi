@@ -8,5 +8,3 @@
 Важно.
 
 Docker-файл находится не в корневой директории. Для правильной сборки image нужно указывать путь к файлу. `docker build -f ./ShippingCalculator.WebApi/Dockerfile .` вызывать из корневой папки проекта.
-
-Для используемых запросов к API SDEC необходима авторизация через токен. У тестовых токенов короткий срок службы. Токен указывать в appsettings.json, свойство "Token". Запросить свежий токен можно, например, так `curl --location --request POST 'https://api.edu.cdek.ru/v2/oauth/token?grant_type=client_credentials&client_id=EMscd6r9JnFiQ3bLoyjJY6eM78JrJceI&client_secret=PjLZkKBHEiLK3YsjtNrt3TGNG0ahs3kG'`

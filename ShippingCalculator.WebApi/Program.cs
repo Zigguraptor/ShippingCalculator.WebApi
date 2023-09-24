@@ -1,4 +1,5 @@
 using ShippingCalculator.WebApi.Configurations;
+using ShippingCalculator.WebApi.Services;
 
 namespace ShippingCalculator.WebApi
 {
@@ -11,6 +12,7 @@ namespace ShippingCalculator.WebApi
             // Add services to the container.
             builder.Services.AddConfigurations();
 
+            builder.Services.AddSingleton<ISdecTokenService, SdecTokenService>();
             builder.Services.AddHttpClient<ISdecApiService, SdecApiService>();
 
             builder.Services.AddControllers();
