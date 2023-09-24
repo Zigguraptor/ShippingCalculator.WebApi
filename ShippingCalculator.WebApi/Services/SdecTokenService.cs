@@ -6,6 +6,7 @@ namespace ShippingCalculator.WebApi.Services;
 
 public class SdecTokenService
 {
+    private readonly object _lock = new();
     private readonly HttpClient _httpClient;
     private readonly SdecApiConfiguration _sdecApiConfiguration;
     private string _token;
@@ -17,6 +18,17 @@ public class SdecTokenService
         _sdecApiConfiguration = sdecApiConfiguration;
         _httpClient.BaseAddress = _sdecApiConfiguration.BaseUri;
         _token = GetNewToken();
+    }
+
+    public string GetToken()
+    {
+        if (_expiringTime > DateTime.Now) return _token;
+
+        lock (_lock)
+            if (_expiringTime < DateTime.Now)
+                _token = GetNewToken();
+
+        return _token;
     }
 
     private string GetNewToken()
