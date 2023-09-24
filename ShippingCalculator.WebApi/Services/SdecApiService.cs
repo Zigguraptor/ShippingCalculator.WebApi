@@ -36,7 +36,7 @@ public class SdecApiService : ISdecApiService
 
         if (location == null)
             throw new JsonException();
-        if (location.fias_guid != fiasCode)
+        if (location.FiasGuid != fiasCode)
             throw new Exception($"Location not found for fiasCode: {fiasCode}");
 
         return location;
@@ -47,11 +47,11 @@ public class SdecApiService : ISdecApiService
     {
         var request = new RequestToTariffList
         {
-            type = (int)OrderType.Delivery,
-            currency = (int)Currency.RUB,
-            from_location = sender,
-            to_location = receiver,
-            packages = packages
+            Type = (int)OrderType.Delivery,
+            Currency = (int)Currency.RUB,
+            FromLocation = sender,
+            ToLocation = receiver,
+            Packages = packages
         };
         var jsonContent = JsonSerializer.Serialize(request);
         var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
