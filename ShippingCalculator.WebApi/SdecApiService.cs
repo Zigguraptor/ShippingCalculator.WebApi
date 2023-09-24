@@ -1,8 +1,9 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
-using Microsoft.Net.Http.Headers;
 using ShippingCalculator.WebApi.Configurations;
 using ShippingCalculator.WebApi.Models;
+using ShippingCalculator.WebApi.Services;
 
 namespace ShippingCalculator.WebApi;
 
@@ -11,13 +12,14 @@ public class SdecApiService : ISdecApiService
     private readonly HttpClient _httpClient;
     private readonly SdecApiConfiguration _sdecApiConfiguration;
 
-    public SdecApiService(HttpClient httpClient, SdecApiConfiguration sdecApiConfiguration)
+    public SdecApiService(HttpClient httpClient, ISdecTokenService sdecTokenService,
+        SdecApiConfiguration sdecApiConfiguration)
     {
         _httpClient = httpClient;
         _sdecApiConfiguration = sdecApiConfiguration;
-
-        _httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, sdecApiConfiguration.Token);
         _httpClient.BaseAddress = _sdecApiConfiguration.BaseUri;
+        _httpClient.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", sdecTokenService.GetToken());
     }
 
     public async Task<Location> GetLocationByFiasCodeAsync(string fiasCode)
