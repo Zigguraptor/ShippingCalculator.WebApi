@@ -4,7 +4,7 @@ using ShippingCalculator.WebApi.Models;
 
 namespace ShippingCalculator.WebApi.Services;
 
-public class SdecTokenService
+public class SdecTokenService : ISdecTokenService
 {
     private readonly object _lock = new();
     private readonly HttpClient _httpClient;
